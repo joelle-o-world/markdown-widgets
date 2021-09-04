@@ -2,14 +2,15 @@
 
 hi
 
-§ date
+| date
 
 ooh
 
-§ unknown
+| unknown
 
-§ sh ls
+| sh ls
+
+| sh date
 
 
-
-§ sh git status
+| sh git status

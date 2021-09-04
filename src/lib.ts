@@ -1,3 +1,5 @@
+const prefix = "| ";
+
 function nextLineIndex(str: string, position = 0) {
   if (position === str.length) return null;
   let i = str.indexOf("\n", position);
@@ -17,7 +19,7 @@ export function* iterateBlocks(str: string) {
   let start = 0;
   let blockStart = null;
   for (let end of lineEnds(str)) {
-    if (str[start] === "§" && str[start + 1] === " ") {
+    if (str.slice(start, start + prefix.length) === prefix) {
       blockStart = blockStart === null ? start : blockStart;
     } else if (blockStart !== null) {
       yield {
@@ -34,7 +36,7 @@ export function* iterateBlocks(str: string) {
 export function parseBlock(blockStr: string) {
   const [header, ...bodyLines] = blockStr
     .split("\n")
-    .map((line) => line.slice(2));
+    .map((line) => line.slice(prefix.length));
   return {
     header,
     body: bodyLines.join("\n"),
@@ -43,7 +45,7 @@ export function parseBlock(blockStr: string) {
 export type ParsedBlock = ReturnType<typeof parseBlock>;
 
 export function rePrefixBlock({ header, body }: ParsedBlock) {
-  return [header, ...body.split("\n")].map((line) => "§ " + line).join("\n");
+  return [header, ...body.split("\n")].map((line) => prefix + line).join("\n");
 }
 
 export interface MarkdownWidgetPlugin {
