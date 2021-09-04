@@ -40,16 +40,17 @@ export function parseBlock(blockStr: string) {
     body: bodyLines.join("\n"),
   };
 }
-type ParsedBlock = ReturnType<typeof parseBlock>;
+export type ParsedBlock = ReturnType<typeof parseBlock>;
 
 export function rePrefixBlock({ header, body }: ParsedBlock) {
   return [header, ...body.split("\n")].map((line) => "§ " + line).join("\n");
 }
 
-interface MarkdownWidgetPlugin {
-  (body: string): Promise<string>;
-  (body: string, context: { header: string }): Promise<string>;
+export interface MarkdownWidgetPlugin {
+  (black: ParsedBlock, context?: {}): Promise<string>;
 }
+
+const firstWord = (str: string) => str.slice(0, str.indexOf(" "));
 
 export function transformBlocks(
   original: string,
@@ -58,10 +59,10 @@ export function transformBlocks(
   let promises = [];
 
   for (let { block, start, end } of iterateBlocks(original)) {
-    let plugin = plugins[block.header];
+    let plugin = plugins[firstWord(block.header)];
     if (plugin)
       promises.push(
-        plugin(block.body).then((transformedBody) => ({
+        plugin(block).then((transformedBody) => ({
           start,
           end,
           blockStr: rePrefixBlock({

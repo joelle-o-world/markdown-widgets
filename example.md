@@ -7,3 +7,9 @@ hi
 ooh
 
 § unknown
+
+§ sh ls
+
+
+
+§ sh git status
