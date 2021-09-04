@@ -80,7 +80,7 @@ export function transformBlocks(
     let bits = [];
     for (let { start, end, blockStr } of replacements) {
       bits.push(original.slice(lastEnd, start));
-      bits.push(blockStr);
+      bits.push(blockStr + "\n");
       lastEnd = end;
     }
     bits.push(original.slice(lastEnd));
