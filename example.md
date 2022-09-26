@@ -8,9 +8,8 @@ ooh
 
 | unknown
 
-| sh ls
-
 | sh date
 
+| sh git status --porcelain
 
-| sh git status
+| sh grep -r "TODO" src
